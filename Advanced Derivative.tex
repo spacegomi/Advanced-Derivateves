@@ -766,7 +766,7 @@ using
 yield curve ... to be interpolated
 
 
-\subsubsection{Maeket-to-Market fo a forward swap}
+\subsubsection{Market-to-Market fo a forward swap}
 Suppose has swap starting $T_M$ with maturity $T_N$
 as a receiver (long bond party) with the fixed rate $X$,
 notional $L$.
@@ -774,9 +774,10 @@ Suppose the current $(t=0)$ market quotes is given by
 $S(0,T_M,T_N)$.
 
 \begin{align}
-  PV(t=0) = LX\sum_{n=M+1}^N \Delta_n P(0,T_n)
+  PV(t=0) &= LX\sum_{n=M+1}^N \Delta_n P(0,T_n)
   -L\sum_{n=M+1}^{N}P(0,T_n)\delta_n P(0,T_n)F(0,T_{n-1},T_n)
-  =L\sum_{n=M+1}^{N}\Delta_n P(0,T_n)(X-S(0,T_M,T_N))
+  \notag\\
+  &=L\sum_{n=M+1}^{N}\Delta_n P(0,T_n)(X-S(0,T_M,T_N))
 \end{align}
 bondのreceiverは金利が下がったら嬉しい
 
@@ -823,7 +824,7 @@ Suppose the market change induces
 then, change of the P.V. :
 \begin{align}
   \delta P.V.=&L\sum_{i=M+1}^N\Delta_i(\delta P(0,T_i))
-  (X-S(0;T_M,T_N))
+  (X-S(0;T_M,T_N)) \notag \\
   &+L\sum_{i=M+1}^N\Delta_i P(0,T_i)
   (-\delta S_M,N) + \mbox{higher order}
 \end{align}
