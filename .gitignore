@@ -10,3 +10,5 @@ fig/
 *.log
 
 *.gz
+*.synctex
+*.synctex(busy)
