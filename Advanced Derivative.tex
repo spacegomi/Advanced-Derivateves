@@ -46,17 +46,18 @@
 \author{Kohei Fukushima}
 \date{\today}
 
-
 \begin{document}
 \maketitle
 \pagestyle{fancy}
 \lhead{Kohei Fukushima}
-\rhead{\today}
+%\rhead{\today}
+\rhead{\rightmark}
 
-%\quad \; \: \, 左ほど大きな空白
-%\cdot ・ドット
+% \newpage
+% \thispagestyle{empty}
+% \tableofcontents　%目次
 
-\section{Bond and Forward contract}
+\section{Bond and Forward Contract}
 \subsection{Interest Rates}
 \begin{asm}
   We asssume that there exists a default free
@@ -552,8 +553,7 @@ off course,
       \item At $T_N$, receive the principal $\df{P(0,T_M)}{P(0,T_N)}$,
       and pays $(1+\delta F)$
     \end{itemize}
-    (abbr.)
-
+    
     Net cash flow at $T_N$:
     $\left(\df{P(0,T_M)}{P(0,T_N)}\right)-(1+\delta F)$ \\
     If we require no-arbitrage, 
@@ -564,6 +564,13 @@ off course,
     \end{align}
   \end{prf}
 \end{lem}
+
+\begin{figure}[H]　%HはHereを意味する
+  \begin{center}
+    \includegraphics[width=10cm]{fig/1_3_01.JPG}
+  \end{center}
+\end{figure}
+
 
 We write the above $F$ as
 \begin{align}
@@ -627,7 +634,13 @@ Fix a time partition $0=T_0<T_1<...<T_M$
   \end{align}
   are the day counts fot a fixed and floating payments, respectively.
 \end{definition}
-(abbr.)\\
+
+\begin{figure}[H]　%HはHereを意味する
+  \begin{center}
+    \includegraphics[width=10cm]{fig/1_3_02.JPG}
+  \end{center}
+\end{figure}
+
 
 \begin{definition}{(Swap Rate)}
   The (spot) swap rate for the maturity $T_M$ is the fixed rate $K$
@@ -675,7 +688,7 @@ Let us approximate as
   A forward swap for the period $[T_M,T_N]$ \\
   $\Rightarrow$ cash flow exchanges
   at $T_i, \, i=\{M+1, ..., N\} $ \\
-  $NK\Delta_i \, \leftrightarrow \, NL(T_{i+1},T_i)\delta_i$
+  $NK\Delta_i \, \leftrightarrow \, NL(T_{i-1},T_i)\delta_i$
 
   Let fixed rate be $K$, notional $=1$
   \begin{align}
@@ -875,7 +888,268 @@ receiver:
 \end{align}
 
 
+\newpage
+\section{Binomial Model}
+多期間モデルは連続モデルへの直観を与える．
+PDEの数値計算との関連もあり．
 
+\subsection{One-Period Binomial Model}
+\subsubsection{Model Description}
+
+There are two points in time $t=0,T$.
+Two tradable assets:
+\begin{itemize}
+  \item Bond (risk-free asset)
+  \begin{align}
+    B_0&=1 \\
+    B_T&=e^{rT}
+  \end{align}
+  (deterministic) \\
+  $r$: zero rate for $[0,T]$ at $T=0$
+  \item Stock (risky asset)
+  \begin{align}
+    S_0&=s \, (>0) \\ 
+    S_T&=
+    \begin{cases}
+      su \quad \mbox{with prob.} \, P_u \\
+      sd \quad \mbox{with prob.} \, P_d
+    \end{cases} \\
+    &P_u>0, \, P_d>0, \, P_u+P_d=1, \, 0<d<u
+  \end{align}
+  We write for simplicity:
+  \begin{align}
+    S_T&=sZ \\
+    Z&=
+    \begin{cases}
+      u \quad \mbox{with prob.} \, P_u \\
+      d \quad \mbox{with prob.} \, P_d
+    \end{cases}
+  \end{align}
+  under emprical measure $\mathbb{P}$, 
+  $\mathbb{P}(\{up\})=P_u, \,
+  \mathbb{P}(\{down\})=P_d$
+\end{itemize}
+
+Portfolio : $h(x,y) \quad x,y\in\mathbb{R}$
+\begin{itemize}
+  \item $x$: number of position for the bond
+  \item $y$: number of position for the stock
+\end{itemize}
+
+the value process of the portfolio $h$:
+\begin{align}
+  V_t^h&=xB_t+yS_t \quad \mbox{in general} \\
+  V_0^h&=x+ys \\
+  V_T^h&=xe^{rT}+ysZ
+\end{align}
+
+\begin{definition}
+  An arbitrage portfikui us a portfolio with the properties:
+  \begin{align}
+    V_0^h=0, \, P(V_T^h\geq 0)=1, \, P(V_T^h>0)>0
+  \end{align}
+  * no-arbitrage $\Rightarrow$ existence of risk neutral measure
+  (we'll see later)
+\end{definition}
+
+\begin{prop}\label{prop_af}
+  The one-period binomial model is arbitrage free
+  iff (=if and only if) the following condition holds:
+  \begin{align}\label{cond_af}
+    0 < d < e^{rT} <u
+  \end{align}
+
+  \begin{prf}{proof of above prop.} 
+    
+    \begin{itemize}
+      \item (necessarity = only if):
+      Suppose \ref{cond_af} does not hold.
+      \begin{enumerate}
+        \item $e^{rT}\leq d < u$
+        \begin{enumerate}
+          \item Sell the Bond $s$ units
+          \item Buy one unit of the stock
+        \end{enumerate}
+        $h(x,y)=(-s,1)$, net cf $=0$ at $t=0$.
+        Then,
+        \begin{align}
+          V_T^h=-se^{rT}+sZ=s(-e^{rT}+Z)
+        \end{align}
+        It's clear that $V_T \geq 0$, $P(V_T\geq 0)=1$.
+        \begin{align}
+          P(V_T^h>0)=P(Z=u)=P_u>0
+        \end{align}
+        Therefore, arbitrage.
+
+        \item $d < u \leq e^{rT}$ \\
+        各自考えよ
+      \end{enumerate}
+
+      \item (sufficiency = if):
+      Suppose \ref{cond_af} holds. \\
+      Assume $V_0^h=0$ then $x+ys=0 \, \Rightarrow \, ys=-x$.
+      \begin{align}
+        &V_T^h =xe^{rT}+ysZ=x(e^{rT}-Z) \\
+        &P(V_T^h\geq 0) < 1
+      \end{align}
+      Therefore, no-arbitrage.
+
+    \end{itemize}
+  \end{prf}
+
+\end{prop}
+
+\subsubsection{Risk-neutral Probability Measure}
+Suppose $d<e^{rT}<u$ holds, \\
+$\Rightarrow$ one can find $q_u, \, q_d \, >0$ s.t.
+
+\begin{align}
+  \begin{cases}
+    q_u+q_d=1 \\
+    q_d u+q_d d=e^{rT}
+  \end{cases} \\
+  \Rightarrow
+  \begin{cases}
+    q_u=\df{e^{rT}-d}{u-d} \quad (>0) \\
+    q_d=\df{u-e^{rT}}{u-d} \quad (>0)
+  \end{cases}
+\end{align}
+We define a new (and not emprical) probability measure
+$\mathbb{Q}$ such that
+\begin{align}
+  \mathbb{Q}(Z=u)&=q_u \\
+  \mathbb{Q}(Z=d)&=q_d
+\end{align}
+It's interesting to observe that
+\begin{align}
+  e^{-rT}\mathrm{E}^{\mathbb{Q}}[S_T]
+  &=e^{-rT}(q_u\times su+q_d\times sd) \notag \\
+  &=se^{-rT}(q_u u+q_d d)=s\,(=S_0)
+\end{align}
+
+In general,
+\begin{align}
+  \{\ e^{-rT}S_t \}_{t=0,T} \quad ... \, \mathbb{Q}
+  \mbox{-martingale}
+\end{align}
+
+\begin{definition}{(Risk-neutral Measure)}
+  The probability measure $\mathbb{Q}$ with associated
+  probability $(q_u, q_d)$ satisfying the condition
+  eq\eqref{cond_af} is called the risk-neutral measure.
+\end{definition}
+
+\begin{prop}
+  The one-period binomial model just explained is arbitrage
+  free iff there exists a risk-neutral measure
+  $\mathbb{Q}$ ($q_u>0,\, q_d>0)$
+\end{prop}
+
+\begin{prf}
+  arbitrage free $\Leftrightarrow$ $d<e^{rT}<u$
+  ($\because$ Prop. \ref{prop_af}) \\
+  \begin{align}
+    &\mathbb{Q}=(q_u,q_d) \\
+    &q_u=\df{e^{rT}-d}{u-d} , \quad
+    q_d=\df{u-e^{rT}}{u-d} \\
+    &q_u+q_d=1
+  \end{align}
+
+  If such $\mathbb{Q}$ exists, then
+  \begin{align}
+    & \exists q_u,q_d \, >0 \quad \mbox{s.t.}
+    \begin{cases}
+      q_u+q_d=1 \\
+      q_u u + q_d d =e^{rT}
+    \end{cases} \\
+    \Rightarrow & \, d<e^{rT}<u
+  \end{align}
+\end{prf}
+
+\subsubsection{Risk-neutral Pricing}
+\begin{definition}{(Contingent Claim)}
+  A contingent claim is any random cash flow $X_T$ at $T$
+  of the form $X_T=\Phi(S_T)$ with some function $\Phi$.
+
+  \begin{ex}{(call option with strike $K$)}
+    \begin{align}
+      \Phi(S_T)=\max(S_T-K,0)=(S_T-K)^{+}
+    \end{align}
+  \end{ex}
+\end{definition}
+
+\begin{definition}{(Replicable / Complete)}
+  A given contingent claim $X$ is said to be replicatable
+  (or perfectly hedgeable) if there exists a portfolio $h$
+  such that $V_T^h=X_T$ with probability $1$ (under $\mathbb{P}$).
+  In this case, we call $h$ a replicating portfolio of $X$.
+  If all contingent claim are replicable, we say
+  the market is complete. Otherwise the market is incomplete.
+\end{definition}
+
+\begin{prop}
+  Suppose that a contingent claim $X$ is replicable by
+  portfolio $h$. Then, any price at $t=0$ of the claim $X$
+  other than $V_0^h$ will lead to an arbitrage opportunity.
+\end{prop}
+
+\begin{prf}
+  Suppose $h$ is given by $h=(x,y)$. Suppose $V_0^h\neq X_0$.
+  \begin{enumerate}
+    \item $V_0^h<X_0$
+    \begin{itemize}
+      \item Short the contingent claim $X$ (one gets $X_0$)
+      \item Construct a portfolio $h(x,y)$ : $V_0^h=x+sy$
+      \item Buy $(X_0-V_0^h)$ units of bond 
+    \end{itemize}
+    portfolio $h'=(x+X_0-V_0^h, y)$ + short position of $X$ \\
+    net cash flow at $T$:
+    \begin{align}
+      V_T^{h'}-X_T=(X_0-V_0^h)e^{rT}+V_T^h -X_T
+      =(X_0-V_0^h)e^{rT} > 0
+    \end{align}  
+    $\rightarrow$ arbitrage.
+    \item $V_0^h>X_0$
+    \begin{itemize}
+      \item Buy the contingent claim $X$
+      \item Short the replicating portfolio $h(x,y)$
+      : $V_0^h=x+sy$
+      \item Buy $(V_0^h-X_0)$ units of bond 
+    \end{itemize}
+    portfolio $h''=(V_0^h-X_0-x, -y)$ + long position of $X$ \\
+    net cash flow at $T$:
+    \begin{align}
+      V_T^{h''}+X_T=(V_0^h-X_0)e^{rT}-V_T^h +X_T
+      =(V_0^h-X_0)e^{rT} > 0
+    \end{align}  
+    $\rightarrow$ arbitrage.
+  \end{enumerate}
+\end{prf}
+
+
+\begin{prop}
+  The binomial model is complete.
+\end{prop}
+
+\begin{prf}
+  Consider a general contingent claim $X$
+  whose payoff at $T$ is $\Phi(S_T)$.
+  $\Phi : \mathbb{R} \to \mathbb{R}$ function.
+  \begin{ex}
+    Call option $\Phi(S_T)=\max(S_T-K,0), \quad K\in\mathbb{R}$\\
+    It suffices to construct a strategy $h=(x,y)$ s.t.
+  \end{ex}
+\end{prf}
+
+
+
+\subsection{The Multi-Period Binomial Model}
+\subsubsection{Model Description}
+$0=t_0<t_1<...<t_N=T$
+
+\newpage
+\section{I\^{t}o Formula and Option Valuation}
+\subsection{Probability Space}
 
 
 
