@@ -49,7 +49,7 @@
 \begin{document}
 \maketitle
 \pagestyle{fancy}
-\lhead{Kohei Fukushima}
+\lhead{Advanced Derivative}
 %\rhead{\today}
 \rhead{\rightmark}
 
@@ -944,11 +944,11 @@ the value process of the portfolio $h$:
 \end{align}
 
 \begin{definition}
-  An arbitrage portfikui us a portfolio with the properties:
+  An arbitrage portfolio us a portfolio with the properties:
   \begin{align}
     V_0^h=0, \, P(V_T^h\geq 0)=1, \, P(V_T^h>0)>0
   \end{align}
-  * no-arbitrage $\Rightarrow$ existence of risk neutral measure
+  * no-arbitrage $\Leftrightarrow$ existence of risk neutral measure
   (we'll see later)
 \end{definition}
 
@@ -959,7 +959,7 @@ the value process of the portfolio $h$:
     0 < d < e^{rT} <u
   \end{align}
 
-  \begin{prf}{proof of above prop.} 
+  \begin{prf}{(proof of above prop.)} 
     
     \begin{itemize}
       \item (necessarity = only if):
@@ -967,32 +967,45 @@ the value process of the portfolio $h$:
       \begin{enumerate}
         \item $e^{rT}\leq d < u$
         \begin{enumerate}
-          \item Sell the Bond $s$ units
+          \item Sell the bond $s$ units
           \item Buy one unit of the stock
         \end{enumerate}
-        $h(x,y)=(-s,1)$, net cf $=0$ at $t=0$.
+        $h(x,y)=(-s,1)$, net cash flow $=0$ at $t=0$.
         Then,
         \begin{align}
           V_T^h=-se^{rT}+sZ=s(-e^{rT}+Z)
         \end{align}
-        It's clear that $V_T \geq 0$, $P(V_T\geq 0)=1$.
+        It's clear that $V_T^h \geq 0$, $P(V_T^h\geq 0)=1$.
         \begin{align}
           P(V_T^h>0)=P(Z=u)=P_u>0
         \end{align}
-        Therefore, arbitrage.
+        $\rightarrow$ arbitrage.
 
         \item $d < u \leq e^{rT}$ \\
-        各自考えよ
+        \begin{enumerate}
+          \item Sell one unit of the $s$ stock
+          \item Buy the bond s units
+        \end{enumerate}
+        $h(x,y)=(s,-1)$, net cash flow $=0$ at $t=0$.
+        Then,
+        \begin{align}
+          V_T^h=se^{rT}-sZ=s(e^{rT}-Z)
+        \end{align}
+        It's clear that $V_T^h \geq 0$, $P(V_T\geq 0)=1$.
+        \begin{align}
+          P(V_T^h>0)=P(Z=d)=P_d>0
+        \end{align}
+        $\rightarrow$ arbitrage.
       \end{enumerate}
 
       \item (sufficiency = if):
       Suppose \ref{cond_af} holds. \\
-      Assume $V_0^h=0$ then $x+ys=0 \, \Rightarrow \, ys=-x$.
+      Assume $V_0^h=0$ then $x+ys=0 \, \Leftrightarrow \, ys=-x$.
       \begin{align}
         &V_T^h =xe^{rT}+ysZ=x(e^{rT}-Z) \\
         &P(V_T^h\geq 0) < 1
       \end{align}
-      Therefore, no-arbitrage.
+      $\rightarrow$  no-arbitrage.
 
     \end{itemize}
   \end{prf}
@@ -1087,7 +1100,7 @@ In general,
   the market is complete. Otherwise the market is incomplete.
 \end{definition}
 
-\begin{prop}
+\begin{prop}\label{prop_unique}
   Suppose that a contingent claim $X$ is replicable by
   portfolio $h$. Then, any price at $t=0$ of the claim $X$
   other than $V_0^h$ will lead to an arbitrage opportunity.
@@ -1138,14 +1151,221 @@ In general,
   \begin{ex}
     Call option $\Phi(S_T)=\max(S_T-K,0), \quad K\in\mathbb{R}$\\
     It suffices to construct a strategy $h=(x,y)$ s.t.
+    \begin{align}
+      V_T^h=
+      \begin{cases}
+        \Phi(su) \quad \mbox{if} \, Z=u \\
+        \Phi(sd) \quad \mbox{if} \, Z=d
+      \end{cases}
+    \end{align}
+    * terminal valueが複製元デリバティブと同じになるような
+    portfolio $h$を探す．
+    \begin{align}
+      \begin{cases}
+        e^{rT}x+suy=\Phi(su) \\
+        e^{rT}x+sdy=\Phi(sd) 
+      \end{cases} \\
+      \Leftrightarrow
+      \begin{cases}
+        x=e^{-rT} \df{u\Phi(sd)-d\Phi(su)}{u-d} \\
+        y=\df{1}{s} \df{\Phi(su)-\Phi(sd)}{u-d}
+      \end{cases}
+    \end{align}
   \end{ex}
 \end{prf}
 
+
+Option Pricing (Assume there is no-arbitrage opportunity)
+
+Consider the same contingent claim $X$
+with payoff $\Phi(S_T)$
+
+The price $X_0$ at $t=0$ of the claim is given by
+$X_0=V_0^h$ ($\because$ Prop.\ref{prop_unique}).
+\begin{align}
+  X_0&=x+sy
+  =e^{-rT} \left\{\df{u\Phi(sd)-d\Phi(su)}{u-d}
+  +e^{rT} \df{\Phi(su)-\Phi(sd)}{u-d} \right\} \notag \\
+  &=e^{-rT} \left\{ \df{e^{rT}-d}{u-d} \Phi(su)
+  + \df{u-e^{rT}}{u-d} \Phi(sd) \right\}  \\
+  X_0 &=e^{-rT}\{ q_u\Phi(su)+q_d\Phi(sd) \}
+  =e^{-rT}\mathrm{E}^{\mathbb{Q}}[\Phi(S_T)]
+\end{align}
+
+$(P_u,P_d)\leftrightarrow (q_u,q_d)$
 
 
 \subsection{The Multi-Period Binomial Model}
 \subsubsection{Model Description}
 $0=t_0<t_1<...<t_N=T$
+
+time partition:
+\begin{align}
+  t_i-t_{i-1}=\Delta t=\df{T}{N} \quad \mbox{for} \,
+  \forall i
+\end{align}
+each $t_i \, i=\{0,...,N\}$, one can trade securities.
+
+Securities:
+\begin{itemize}
+  \item Bond (risk-free, non-random) \\
+  Bond price process:
+  \begin{align}
+    B_0=1, \, B_n=e^{r\Delta t} B_{n-1}=e^{rn\Delta t}
+  \end{align}
+  Risk-free rate $r \, (\geq 0)$ : constant
+
+  \item Stock \\
+  Stock price process:
+  \begin{align}
+    &S_0=s, \, S_n=S_{n-1}Z_n \\
+    &\begin{cases}
+      P(Z_n=u)=P_u \\
+      P(Z_n=d)=P_d
+    \end{cases}
+    \quad \mbox{for every } n
+  \end{align}
+  Assumption:
+  \begin{align}
+    0<d<u, \, P_u>0, \, P_d>0, \, P_u+P_d=1
+  \end{align}
+  $2^N$ : number of all securities up to $t_N$
+\end{itemize}
+
+
+\begin{definition}
+  A portfolio strategy is defined as a process
+  \begin{align}
+    h_{t_i}=\left(
+    \begin{array}{c}
+      x_{t_i} \\
+      y_{t_i}
+    \end{array}
+    \right)
+    , \quad i=\{0,...,N\}
+  \end{align}
+
+  $h_{t_i}$ is the position fot (Bond, Stock)
+  for the period $[t_i, t_{i+1})$, newly taken at $t_i$
+  and kept unchanged until $t_{i+1}$.
+  $h_{t_i}$ can be dependent only on $(S_0,...,S_{t_{i-1}}$.
+\end{definition}
+
+Portfolio value at $t_i$:
+\begin{align}
+  V_{t_i}^h=h_{t_i}^T \left(
+    \begin{array}{c}
+      B_{t_i} \\
+      S_{t_i}
+    \end{array}
+  \right)
+  =x_{t_i}B_{t_i} + y_{t_i}S_{t_i}
+\end{align}
+(* T : transposition)
+
+For simplicity, we sometimes write:
+\begin{align}
+  V_i^h=x_i B_i + y_i S_i
+\end{align}
+
+\begin{definition}{(Self-Financing)}
+  A portfolio strategy $h$ is said to be self-financing
+  if the following condition holds for every time step $i$:
+  \begin{align}
+    h_i^T \left(
+    \begin{array}{c}
+      B_i \\ S_i
+    \end{array}
+    \right)
+    = h_{i-1}^T \left(
+    \begin{array}{c}
+      B_i \\ S_i
+    \end{array}
+    \right)
+  \end{align}
+  * $t=t_i$でのportfolio組み換え
+\end{definition}
+
+If the strategy $h$ is self-financing,
+\begin{align}
+  \Delta V_i^h:&=V_i^h-V_{i-1}^h
+  =(x_{i-1}B_i + y_{i-1}S_i)-(x_{i-1}B_{i-1} + y_{i-1}S_{i-1})\notag\\
+  &=x_{i-1}(B_i-B_{i-1})+y_{i-1}(S_i-S_{i-1}) \notag\\
+  &=x_{i-1}\Delta B_i + y_{i-1}\Delta S_i
+\end{align}
+
+\subsubsection{Risk-neutral Pricing}
+\begin{asm}\label{asm_noarb}
+  We assume $d<e^{r\Delta t}<u$
+\end{asm}
+\begin{definition}
+  The risk-neutral probability measure $\mathbb{Q}$
+  (associated with $(q_u,q_d)$) is defined as a probability
+  measure satisfying
+  \begin{align}
+    S_i=e^{-r\Delta t}\mathrm{E}^{\mathbb{Q}}
+    [S_{i+1}|S_i] \quad \mbox{for every } i=\{0,...,N-1\}
+  \end{align}
+\end{definition}
+
+The existence and uniqueness can be shown as follows:
+\begin{align}
+  &\begin{cases}
+    q_u+q_d=1 \\
+    u q_u +d q_d = e^{r\Delta t}
+  \end{cases} \\
+  \Leftrightarrow
+  &\begin{cases}
+    q_u=\df{e^{r\Delta t}-d}{u-d} \quad (>0) \\
+    q_d=\df{u-e^{r\Delta t}}{u-d} \quad (>0)
+  \end{cases}
+  \quad \mbox{by Asm.\ref{asm_noarb}}
+\end{align}
+
+\begin{prop}
+  Suppose that a contingent claim $X$ is replicable by the
+  self-financing portfolio $h$. Then the price of the claim $X$
+  at any time $t_i \, 0\leq i\leq N$ must be equal to $V_{t_i}^h$,
+  otherwise there exists an arbitrage opportunity. 
+\end{prop}
+
+Goal:
+\begin{theorem}
+  The multi-period binomial model satisfying assumption
+  \ref{asm_noarb} is complete, i.e. cash-flow of any
+  contingent claim can be perfectly replicated.\\
+  (by self-financinf portfolio strategy $(h_{t_i})_{i\geq 0}$)
+\end{theorem}
+
+
+**************以降 未完**************
+
+Preparetion:
+\begin{itemize}
+  \item European Option
+  \item expiry: $t_N=T$
+  \item option holder receives (or pay if negative)
+  $\Phi(S_N) \, (=\Phi(S_T))$
+  \item $\Phi : \mathbb{R}\to\mathbb{R}$ 
+\end{itemize}
+
+state at $t_n$ ... $(n+1)$個
+
+number of up movement : $(0,...,n)$
+
+We label it by $(n,k), \, k\in\{0,...,n\} , \,
+S_n(k)=su^k d^{n-k}$
+
+Construction of self-financing strategy at $t_N$.
+Replicating portfolio must satisfy:
+\begin{align}
+  V_N(k)=\Phi(S_N(k))=\Phi(su^k d^{n-k})
+  \quad \mbox{for every } k=0,...,N
+\end{align}
+
+at $t_N-1$
+
+
 
 \newpage
 \section{I\^{t}o Formula and Option Valuation}
