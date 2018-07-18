@@ -53,6 +53,8 @@
 %\rhead{\today}
 \rhead{\rightmark}
 
+
+
 % \newpage
 % \thispagestyle{empty}
 % \tableofcontents　%目次
@@ -1372,5 +1374,264 @@ at $t_N-1$
 \subsection{Probability Space}
 
 
+\subsubsection{Relation to the Risk-Neutral Pricing}
+Suppose that there is a probability measure $Q$
+equivalent to $P$ such that
+\begin{align}
+  dS(t)=r(t)S(t)dt+\sigma(t,S_t)dW_t^Q
+\end{align}
+$W^Q$ : Brownian motion under the measure $Q$
+
+
+
+\subsubsection{BS Option Formula}
+$r, \sigma >0$ : const. \\
+one-dimensional $S, W^Q$
+
+Suppose the stock price follows a geometric Brownian motion
+(log-normal process):
+\begin{align}
+  dS_t=S_t(rd_t+\sigma dW_t^Q)
+\end{align}
+or equivalently
+\begin{align}
+  S_t = S_0 +\int_0^t S_u(rdu+\sigma dW_u^Q)
+\end{align}
+
+Call Option with strike $K \,(>0)$
+\begin{align}
+  \Psi(S_T)=\max(S_T-K,0)
+\end{align}
+option price at $t=0$:
+\begin{align}
+  C=e^{-rT}\mathrm{E}^Q[\max(S_T-K,0)]
+\end{align}
+$S_T>0$ for all $t\geq 0$ if $S_0>0$
+
+Apply It\^{t}o formula to $\ln (S_t)$
+\begin{align}
+  d\ln(S_t)=\df{1}{S_t}dS_t-\df{1}{2}\df{1}{S_t^2}(dS_t)^2
+  =\left(r-\df{\sigma^2}{2} \right)dt+\sigma dW_t^Q
+\end{align}
+
+Integrates the both hands for $[0,T]$
+\begin{align}
+  \ln S_t -\ln S_0
+  &=\left(r-\df{\sigma^2}{2} \right)T+\sigma W_T^Q \\
+  S_T&=S_0 \exp\left(
+  \left(r-\df{\sigma^2}{2} \right)T+\sigma W_T^Q\right)
+\end{align}
+
+Note that $W_T^Q \approx(dist) \sqrt{T}z$ \\
+$z~N(0,1)$ : standard normal (mean:0, variance:1)
+
+$z$ has the density $\phi(s)=\df{1}{\sqrt{2\pi}}
+e^{-\frac{x^2}{2}}$
+\begin{align}
+  C=e^{-rT}\intinf \max\left(S_0 \exp\left\{
+  \left(r-\df{\sigma^2}{2}\right)T+\sigma\sqrt{T}z\right\}
+  -K,0\right)\phi(z)dz
+\end{align}
+
+\begin{align}
+  C=e^{-rT}\intinf \max\left(Fe^{-\frac{\sigma^2}{2}T
+  +\sigma\sqrt{T}z}-K,0 \right)\phi(z)dz,
+  \quad (F=e^{rT}S_0=\df{S_0}{P(0,T)})
+\end{align}
+Let us define
+\begin{align}
+  d2:=\df{1}{\sigma\sqrt{T}}\left(\left(\df{F}{K}\right)
+  -\df{\sigma^2}{2}T\right)
+\end{align}
+Then,
+\begin{align}
+  Fe^{-\frac{\sigma^2}{2}T+\sigma\sqrt{T}z}\geq K
+  \quad \mbox{when } z\geq -d_2
+\end{align}
+Therefore,
+\begin{align}
+  C=e^{-rT}\int_{-d_2}^{\infty} \left(
+  Fe^{-\frac{\sigma^2}{2}T+\sigma\sqrt{T}z}-K\right)\phi(z)dz
+\end{align}
+
+\begin{itemize}
+  \item 1st term:
+  \begin{align}
+    &Fe^{-rT}e^{-\frac{\sigma^2}{2}T}
+    \int_{-d_2}^{\infty}e^{\sigma\sqrt{T}z}
+    \df{1}{\sqrt{2\pi}}e^{-\frac{1}{2}z^2}dz
+    =Fe^{-rT}\int_{-d_2}^{\infty}
+    \df{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(z-\sigma\sqrt{T})^2}dz
+    \notag\\
+    =&Fe^{-rT}\int_{-d_1}^{\infty}
+    \df{1}{\sqrt{2\pi}}e^{-\frac{1}{2}{z'}^2}dz'
+    =Fe^{-rT}N(d_1) \\
+    d_1 :&=d_2+\sigma\sqrt{T}=\df{1}{\sigma\sqrt{T}}
+    \left(\ln\left(\df{F}{K}\right)+\df{\sigma^2}{2}T\right)
+  \end{align}
+  \item 2nd term:
+  \begin{align}
+    -Ke^{-rT}\int_{-d_2}^{\infty}\phi(z)dz
+    =-Ke^{-rT}N(d_2)
+  \end{align}
+\end{itemize}
+
+
+
+Put option?
+\begin{align}
+  P&=e^{-rT}\mathrm{E}^Q[\max(K-S_T,0)] \\
+  \Psi(S_T)&=\max(K-S_T,0)
+\end{align}
+Callと同様の計算は面倒...
+
+Put-Call parity
+\begin{align}
+  &\max(S_T-K,0)-\max(K-S_T,0)=S_T-K \\
+  \therefore\, C-P&=e^{-rT}\mathrm{E}^Q[S_T-K]
+  =e^{-rT}\mathrm{E}^Q[S_T]-Ke^{-rT}\notag\\
+  &=\mathrm{E}^Q[\beta(T)^{-1}S_T]-Ke^{-rT}
+\end{align}
+$(\beta(t)^{-1}S_t)_{0\leq t\leq T}$
+... $Q$-martingale
+\begin{align}
+  \because \, d(\beta(t)^{-1}S_t)=\beta(t)^{-1}
+  \{r(t)S_tdt+dSt\} =\beta(t)^{-1}\sigma S_tdW_t^Q
+\end{align}
+Therefore,
+\begin{align}
+  C-P=\beta(0)^{-1}S_0-Ke^{-rT}=S_0-Ke^{-rT}
+\end{align}
+\begin{align}
+  P&=C-S_0+Ke^{-rT}
+  =e^{-rT}(FN(d_1)-KN(d_2)-F+K)\notag\\
+  &=-e^{-rT}F(1-N(d_1))+e^{-rT}K(1-N(d_2))\notag\\
+  &=e^{-rT}\{KN(-d_2)-FN(-d_1)\}
+\end{align}
+
+
+\subsubsection{Opriont Formula for a Stock with Dividend Yield}
+
+dividend payment $[t,t+dt]$ $q_(t)S_t dt$
+$q$:dividend yield
+
+If we reinvest all the dividends to the same stock,
+one share at $t=0$
+
+$\Rightarrow \, \exp\left(\int_0^t q(s)ds \right)$ share at $t$
+
+$\because$ Number of share $n(t)$ follows
+$\df{d}{dt}n(t)=q(t)n(t)$
+
+
+For no-arbitrage,
+$\left(S(t)e^{\int_0^t q(s)ds}\right)_{0\leq t\leq T}$
+must follow the dynamics corresponding to the stock price
+without dividend payment.
+
+$\Rightarrow \, \left(S(t)e^{\int_0^t q(s)ds}\right)_{0\leq t\leq T}$
+must have the drift rate $r(t)$.
+
+under $Q$, $dS$ must follow:
+\begin{align}
+  dS_t&=(r(t)-q(t))S_t dt+\sigma(t,S_t)dW_t^Q \\
+  d(S_t e^{\int_0^t q(s)ds})
+  &=e^{\int_0^t q(s)ds}(q(t)dt+dS_t) \notag \\
+  &=e^{\int_0^t q(s)ds}(r(t)S_t dt+\sigma(t,S_t)dW_t^Q)
+\end{align}
+
+dividend yield
+\begin{align}
+  dS_t=S_t(r_t-q_t)dt+S_t \sigma_t dW_t^Q
+\end{align}
+For simplicity, $r,q,\sigma >0$ : constants
+
+\begin{align}
+  d\ln S_t = \left(r-q-\df{1}{2}\sigma^2\right)dt+\sigma dW_t^Q\\
+  S_t=
+\end{align}
+
+
+
+
+lllll
+
+
+\begin{ex}{(FX)}\\
+  $(X_t)_{0\leq t\leq T}$ : the price of unit amount of
+  a foreign currency in terms of the domestic currency
+  
+  $X_T$ : asset price, dividend yield $r^f(t)$ \\
+  (foreign interest rate)
+
+  \begin{align}
+    dX_t = (r^d(t)-r^f(t))X_t + \sigma (t,X_t)dW_t^Q
+  \end{align}
+  ($X>0$を保証するもの)
+\end{ex}
+
+\begin{definition}{(Implied volatility)}
+  The implied volatility of an option contract is the volatility
+  constant $\sigma$ which gives the market price of the option
+  when $\sigma$ is used in B.S. model.
+\end{definition}
+(illustration)
+
+
+
+
+\subsubsection{Market Option Quotes and the Implied Distribution}
+For simplicity, assume $r>0$ is constant, $Q$ exists.
+
+Then, a call option price is given by
+\begin{align}
+  c(K)=e^{-rT}\mathrm{E}^Q[(S_T-K)^{+}]
+\end{align}
+expiry $T$ : fixed, strike $K$ : floating
+
+Suppose $S_T$ has a smooth probability density function
+$g(x) : \mathbb{R}\to\mathbb{R}$ under $Q$. Then,
+\begin{align}
+  c(K)=e^{-rT}\int_K^{\infty} (x-K)g(x)dx
+\end{align}
+Then,
+\begin{align}
+  \pd{c}{K}&=-e^{-rT}(x-K)g(x)dx|_{x=K}
+  =-e^{-rT}\int_K^{\infty}g(x)dx \notag \\
+  &=-e^{-rT}\int_K^{\infty}g(x)dx \\
+  \pdd{c}{K}&=e^{-rT}g(K)
+\end{align}
+Implied volatilityの価格変化から$S_T$のdensityを得る：
+\begin{align}
+  g(K)=e^{rT}\pdd{c}{K}
+\end{align}
+
+\subsubsection{Greeks}
+Sensitivity of option (or any derivative contract) price
+with respect to various parameters ($S,t,\sigma$, etc.)
+
+Option price $\Pi(t,S_t)$ at $(t.S_t)$
+
+\begin{itemize}
+  \item Delta:
+  \begin{align}
+    \pd{}{x}\Pi(t,x)|_{x=S_t}
+  \end{align}
+  \item Gamma:
+  \begin{align}
+    \pdd{}{x} \Pi(t,x)|_{x=S_t}
+  \end{align}
+  \item Vega(Kappa):
+  \begin{align}
+    \pd{}{\sigma} \Pi
+  \end{align}
+\end{itemize}
+
+completeｎmarketには十分な流動性が必要．
+unheagableなproductに対する線形な価格評価
+(risk-neutral pricing)をするのは恐ろしい．
+仮定を置かないと正当化されない．
+本当は，各事業者がリスク効用関数(risk-averseness)を設定し，
+それに応じて最適化問題として解くべきである（が，大変なのでやらない)．
 
 \end{document}
