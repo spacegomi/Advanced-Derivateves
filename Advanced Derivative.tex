@@ -353,6 +353,7 @@ $y\to y+\Delta y, \quad B\to B+\Delta B$:
   \end{center}
 \end{figure}
 
+
 \begin{ex}
   Same as Ex.\ref{fwd1} but now the stock pays 
   \underline{continuous dividend}, with dividend rate $y$
@@ -515,15 +516,16 @@ Suppose $T_i$ specifies the date $D_i=D(d_i, m_i, y_i)$
 *accrual: ??
 
 \subsubsection{Forward Rate Agreement (FRA)}
-\begin{definition}{Forward Rate Agreement}
+\begin{definition}{(Forward Rate Agreement)}
   A FRA is a binding(義務の) contract with the two parties
   (lender and borrower) agreeing to let a certain fixed rate $K$
-  act on a prefixed notional amount $N$, over a future period
+  act on a prefixed notional(想定元本)
+  amount $N$, over a future period
   $[T_M, T_N]$.
 \end{definition}
 *notional: 想定される?
 
-\begin{definition}{Forward Rate}
+\begin{definition}{(Forward Rate)}
   A forward rate $F$ for the period $[T_M,T_N]$ with day-count
   $\delta=\delta(T_M,T_N)$ is the fixed rate $K$ with the some
   day-count convention that makes the present value of the FRA zero.
@@ -1383,7 +1385,6 @@ equivalent to $P$ such that
 $W^Q$ : Brownian motion under the measure $Q$
 
 
-
 \subsubsection{BS Option Formula}
 $r, \sigma >0$ : const. \\
 one-dimensional $S, W^Q$
@@ -1627,7 +1628,8 @@ Option price $\Pi(t,S_t)$ at $(t.S_t)$
   \end{align}
 \end{itemize}
 
-completeｎmarketには十分な流動性が必要．
+
+complete marketには十分な流動性が必要．
 unheagableなproductに対する線形な価格評価
 (risk-neutral pricing)をするのは恐ろしい．
 仮定を置かないと正当化されない．
