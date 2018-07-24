@@ -265,7 +265,7 @@ modified duration:
 Insuranceでは通用しないので注意．
 
 
-\subsubsection{Convecity)}
+\subsubsection{Convexity}
 $y$ : yiled (continuous compounding)
 \begin{align}
   C:=\df{1}{B}\df{d^2B}{dy^2}
@@ -417,7 +417,7 @@ $P(0,T)$を乗じてやればよい(ただし市場がliquid,replicatableなと�
 $\Rightarrow$ 後にrisk-nuetralの下で計算すればわざわざreplicationを考える必要がなくなる
 
 
-\subsubsection{Mark to Market of a fwd contract}
+\subsubsection{Mark to Market of a Fwd Contract}
 * P.V.(at $t=0$)\{fwd contract\}は0だが，時間が進むにつれて，
 P.V.は変化する．
 
@@ -674,7 +674,7 @@ Swap rate $K$:
   {\sum_{i=1}^M \Delta_i P(0,T_i)}
 \end{align}
 Let us approximate as
-\begin{align}
+\begin{align}\label{swap_fwd}
   P(0,T_i)\approx 1, \, \delta_i\approx\Delta_i
   \quad \mbox{for all} \, i \\
   \Rightarrow
@@ -708,7 +708,7 @@ Let us approximate as
 \end{ex}
 
 
-\subsubsection{Relation to the fixed coupon bond}
+\subsubsection{Relation to the Fixed Coupon Bond}
 Consider the spot-start swap for $[T_0=0, T_N]$ (notional$=0$)
 \begin{align}
   PV_{float}=\sum_{i=1}^N \delta_i P(0,T_i)F(0,T_{i-1},T_i)
@@ -783,29 +783,40 @@ using
 yield curve ... to be interpolated
 
 
-\subsubsection{Market-to-Market fo a forward swap}
+\subsubsection{Mark-to-Market of a Forward Swap}
 Suppose has swap starting $T_M$ with maturity $T_N$
 as a receiver (long bond party) with the fixed rate $X$,
 notional $L$.
 Suppose the current $(t=0)$ market quotes is given by
 $S(0,T_M,T_N)$.
 
+*notional $L$はsimple rateの$L(T_{i-1},T_i)$とは別物．
+
 \begin{align}
   PV(t=0) &= LX\sum_{n=M+1}^N \Delta_n P(0,T_n)
-  -L\sum_{n=M+1}^{N}P(0,T_n)\delta_n P(0,T_n)F(0,T_{n-1},T_n)
+  -L\sum_{n=M+1}^{N}P(0,T_n)\delta_n F(0,T_{n-1},T_n)
   \notag\\
-  &=L\sum_{n=M+1}^{N}\Delta_n P(0,T_n)(X-S(0,T_M,T_N))
+  &=L\left(\sum_{n=M+1}^{N}\Delta_n \right)
+  P(0,T_n)(X-S(0,T_M,T_N))
 \end{align}
 bondのreceiverは金利が下がったら嬉しい
 
-\subsubsection{Approximation of a fwd swap rate}
+\subsubsection{Approximation of a Fwd Swap Rate}
 \begin{align}
   S(0,T_M,T_N)&=\df{P(0,T_M)-P(0,T_N)}
   {\sum_{i=M+1}^N \Delta_i P(0,T_i)}
   =\df{\sum_{i=M+1}^N \delta_i F(0,T_{i-1},T_i)P(0,T_i)}
   {\sum_{i=M+1}^N \Delta_i P(0,T_i)} \notag \\
-  &\approx \df{1}{N-M} \sum_{i=M+1}^N F(0,T_{i-1},F_i)
-  \quad (as \, \delta_i\approx\Delta_i, \, P(0,T_i)=1)
+  &\approx \df{1}{N-M} \sum_{i=M+1}^N F(0,T_{i-1},T_i)
+  \quad (\mbox{as } \delta_i\approx\Delta_i, \, P(0,T_i)=1)
+\end{align}
+... Swap rate is the average of fwd rates.
+
+\begin{align}
+  \sum_{i=M+1}^N F(0,T_{i-1},T_i)
+  &=\sum_{i=1}^N F(0,T_{i-1},T_i)-\sum_{i=1}^M F(0,T_{i-1},T_i) \notag\\
+  &\approx NS(0;T_0,T_N) - MS(0;T_0,T_M) \quad
+  (\because \ref{swap_fwd})
 \end{align}
 
 $0<T_M<T_N$:
@@ -815,22 +826,30 @@ $0<T_M<T_N$:
 $NS(0;T_0,T_N)\approx$ \{$[T_0,T_N]$のfwd rateのsum\}
 
 \begin{align}
-  (\therefore) S(0;T_M,T_N) &\approx
-  \df{NS(0;T_0,T_M)-MS(0;T_0,T_M)}{N-M} \notag \\
+  \therefore \, S(0;T_M,T_N) &\approx
+  \df{NS(0;T_0,T_N)-MS(0;T_0,T_M)}{N-M} \notag \\
   &\approx \df{T_N}{T_N-T_M}S(0;T_0,T_N)
   -\df{T_M}{T_N-T_M}S(0;T_0,T_M)
 \end{align}
 
 
-\subsubsection{Deltas}
+\subsubsection{Delas (PV01s)}
 * market quotes (input) spot-swap rates $(S_n)_{n=1}^N$
 $\Rightarrow$ $P(0,T)$ $\Rightarrow$ pricing...
 
-Delas(PVO 1s)
+\begin{definition}{(Deltas (PV01s))}
+  Deltas are the price sensitivities of a trade (or portfolio)
+  against the change of each swap rate $S_n\, n=1,...,N$
+\end{definition}
 
+P.V. of portfolio\{$S_n+1b.p.,\, (S_m)_{m\neq n}^N$:unchanged\}
+$-$ P.V. of portfolio\{$S_n, \, (S_n)_{n=1}^N$\}
 
-P.V. of receive swap $[T_M, T_N]$.
+ex. Deltas for a swap \\
+Consider a fwd swap for $[T_M,T_N]$. 
 Notional: $L$, fixed rate: $X$
+
+P.V. of receiver swap $[T_M, T_N]$ :
 \begin{align}
   P.V.(t=0)=L\sum_{i=M+1}^N\Delta_i P(0,T_i)(X-S(0;T_M,T_N))
 \end{align}
@@ -843,18 +862,18 @@ then, change of the P.V. :
   \delta P.V.=&L\sum_{i=M+1}^N\Delta_i(\delta P(0,T_i))
   (X-S(0;T_M,T_N)) \notag \\
   &+L\sum_{i=M+1}^N\Delta_i P(0,T_i)
-  (-\delta S_M,N) + \mbox{higher order}
+  (-\delta S_{M,N}) + \mbox{higher order}
 \end{align}
 
-1st term order $\sim$ $1R^2$ \\
-2nd term order $\sim$ $1R^1$ \\
+1st term order $\sim$ $IR^2$ (*IR:interest rate)\par
+2nd term order $\sim$ $IR^1$ \\
 $||\mbox{1st term}|| << ||\mbox{2nd term}||$
 
 \begin{align}
   \delta P.V. \approx L\sum_{i=M+1}^N\Delta_i P(0,T_i)
-  (-\delta S_M,N)
+  (-\delta S_{M,N})
 \end{align}
-* $(-\delta S_M,N)$ : fwd swap rateの変化
+* $(-\delta S_{M,N})$ : fwd swap rateの変化
 
 
 \begin{align}
@@ -877,19 +896,22 @@ $||\mbox{1st term}|| << ||\mbox{2nd term}||$
   \approx&-L(T_N-T_M)\times \df{1}{T_N-T_M}
   (T_N\delta S_N-T_M\delta S_M) \quad
   (\mbox{approx.}\, P(0,T_i)\approx 1 ) \notag \\
-  =&-L(T_N\delta S_N-T_M \delta S_M)
+  \approx&-L(T_N\delta S_N-T_M \delta S_M)
 \end{align}
-(* day-count conventionのズレは無視)
+* spot-start swap with mat. $T_N$, $T_M$のみで表せる．\\
+* day-count conventionのズレは無視．
 
-\begin{itemize}
-  \item spot-start swap
-  \item maturity $T_N$
-  \item Notional $L$
-\end{itemize}
-receiver:
+if $T_M=T_0$, replace $\delta S_M=0$
+
+spot-start swap, maturity $T_N$, Notional $L$, receiver:
 \begin{align}
-  \delta P.V.=-L\times T_N\times\delta S_N
+  \delta P.V.=&-L\times T_N\times\delta S_N \\
+  &-(\mbox{元本})\times(\mbox{duration})
+  \times(\mbox{yieldの変化}) \notag
 \end{align}
+spot-startなら，自分がenterした年限のswap rateの変化しか関係ない．
+10年swap に入る限り，5年swapや20年swapの変化は関係ない．\\
+$\rightarrow$ ヘッジ戦略に使える．
 
 
 \newpage
@@ -1510,7 +1532,7 @@ then $(\Delta W)^2 \to (dW)^2=dt$ (variance$\to 0$ as dt$\to 0$)
   $H:\Omega\times[0,T]\to R$ of the form
   \begin{align}
     H_t(\omega)=\sum_{i=1}^n h_{i-1}(\omega)
-    \mathbb{1}_{(t_{i-1},t_i]} (t)
+    1_{(t_{i-1},t_i]} (t)
   \end{align}
   where $n\in \mathbb{N}, \, 0=t_0<t_1<...<t=T$,
 \end{definition}
