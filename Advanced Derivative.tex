@@ -1373,10 +1373,333 @@ at $t_N-1$
 
 \newpage
 \section{I\^{t}o Formula and Option Valuation}
+
 \subsection{Probability Space}
 
+\begin{definition}
+  Let $\Omega$ be a non-empty set, and let $\mathcal{F}$ be
+  a collection of subsets of $\Omega$. We say thatt $\mathcal{F}$
+  is a $\sigma$-algebra (or $\sigma$-field) if it satisfies:
+  \begin{enumerate}
+    \item empty set $\phi\in\mathcal{F}$
+    \item If $A\in\mathcal{F}$, then
+    $A^c=(\Omega\backslash A) \in\mathcal{F}$
+    \item Suppose there is a sequence of sets $\{A_i\}_{i=1,...}$
+    and $A_i \in\mathcal{F}$ for all $i$, then
+    $\cup_{i=1}^{\infty} A_i\in\mathcal{F}$.
+  \end{enumerate}   
+\end{definition}
 
-\subsubsection{Relation to the Risk-Neutral Pricing}
+Remarks:
+\begin{itemize}
+  \item (1)(2)$\Rightarrow \, \Omega\in\mathcal{F}$
+  \item (3)(2)$\Rightarrow \, \cap_{i=1}^{\infty} A_i
+  ={(\cup_{i=1}^{\infty} A_i^c)}^c \in \mathcal{F}$
+\end{itemize}
+
+* $\sigma$(sigma) means 'countable infinity' (可算無限)
+
+\begin{ex}
+
+  \begin{itemize}
+    \item $\Omega=\{ \omega_1, \omega_2 \} $
+    \item $\mathcal{F}=\{ \phi, \{\omega_1, \omega_2\} \} $
+    \item $\mathcal{F}=\{ \phi, \{\omega_1, \omega_2\} ,
+    \{\omega_1\} , \{\omega_2 \} \} $
+  \end{itemize}
+\end{ex}
+
+
+\begin{definition}
+  Let $\Omega$ be a non-empty set, and let $\mathcal{F}$ be
+  a $\sigma$-algebra on $\Omega$. A probability measure
+  $\mathbb{P}$ is a function that assigns a number in $[0,1]$
+  to every set $A\in\mathcal{F}$, called probability of $A$
+  $\mathbb{P}(A)$ and satisfies:
+  \begin{enumerate}
+    \item $\mathbb{P}(\Omega)=1$
+    \item $(A_i)_{i\geq 1},\, A_i\in\mathcal{F},\,
+    A_i \cap A_j = \phi \quad if \, (i\neq j)$
+  \end{enumerate}
+  then $\mathbb{P}\left(\cup_{i=1}^{\infty} A_i\right)
+  =\sum_{i=1}^{\infty}\mathbb{P}(A_i)$
+\end{definition}
+
+topology (collection of all open sets)
+
+(略)
+
+
+
+
+
+\subsection{Property of Stochastic Integral}
+Gaussian Distribution
+
+one-dimensional Gaussian distribution
+(mean $0$, variance $1$)
+$N(0,1)$...standard normal
+prob density:
+$\phi(z)=\df{1}{\sqrt{2\pi}}e^{-z^2/2}$
+
+for $a>0$
+\begin{align}
+  \intinf e^{-ax^2}dx=\sqrt{\df{\pi}{a}}
+\end{align}
+
+This implies
+\begin{align}
+  \intinf x^{2n}e^{-ax^2}dx
+  =(-1)^n\intinf \left(
+  \df{\partial^n}{\partial a^n} \right)
+  e^{-ax^2}dx
+  =(-1)^n\left(\df{\partial^n}{\partial a^n}
+  \sqrt{\df{\pi}{a}}\right)
+\end{align}
+
+$(X_t)_{0\leq t\leq T}$ : $\mathbb{F}$-adopted, \\
+$\{X_t(\omega)\in B\}\in \mathcal{F}_t \quad \forall t$,\\
+$B\in\mathcal{B}(\mathbb{R}^n)$\\
+$\Rightarrow$ If we have $\mathcal{F}_t$ information,
+we know the ? $X_t$ of
+
+
+
+\begin{definition}
+  Let $(\Omega, \mathcal{F},\mathbb{P};
+  \mathbb{F}=(\mathcal{F}_t)_{t\geq 0} )$
+  be a filtered probability space.
+  $W$ is a continuous $\mathbb{F}$-adopted process that satisfy
+  \begin{itemize}
+    \item $W(0)=0$
+    \item $W(u)-W(t)$ is independent from $\mathcal{F}_t$
+    (and in particular $W(s)-W(r)$) whenever $r<s\leq t<u$
+    \item $W(t)-W(s)\sim N(0,t-s)$ in distribution\\
+    if $d>1$ then, for each $i$, $W^i(t)-W^i(s)\sim N(0,t-s)$,
+    $W^i, W^j$ are independent.
+  \end{itemize}
+\end{definition}
+
+Here $N(0,v)$ is the gaussian distribution of mean $0$,
+variance $v$.
+Then we call $W$ a $(\mathbb{P};\mathbb{F})$-Brownian motion.
+
+Some propositions of Brownian motion (one-dimensional case)
+
+Set $s<t, \, \Delta t=t-s, \, \Delta W:=W(t)-W(s)$ \\
+$\Rightarrow$
+\begin{align}
+  &\mathrm{E}[\Delta W]=0 \\
+  &\mathrm{E}[(\Delta W)^2]=\mathrm{V}[\Delta W]=t-s=\Delta t
+\end{align}
+\begin{align}
+  \mathrm{V}[(\Delta W)^2]
+  &=\mathrm{E}[(\Delta W)^4]-\mathrm{E}[(\Delta W)^w]^2
+  =\intinf x^4 \df{1}{\sqrt{2\pi\Delta t}}
+  e^{-\frac{x^2}{2\Delta t}}dx - (\Delta t)^2 \notag \\
+  &=(\Delta t)^2 \intinf \df{z^4}{\sqrt{2\pi}}
+  e^{-\frac{z^2}{2}}dz - (\Delta t)^2 
+  =3(\Delta t)^2 - (\Delta t)^2 = 2(\Delta t)^2
+\end{align}
+
+Consider the limit $\Delta \to dt$,
+then $(\Delta W)^2 \to (dW)^2=dt$ (variance$\to 0$ as dt$\to 0$)
+
+\begin{definition}
+  Denote $\mathcal{P}$ the vector space of maps
+  $H:\Omega\times[0,T]\to R$ of the form
+  \begin{align}
+    H_t(\omega)=\sum_{i=1}^n h_{i-1}(\omega)
+    \mathbb{1}_{(t_{i-1},t_i]} (t)
+  \end{align}
+  where $n\in \mathbb{N}, \, 0=t_0<t_1<...<t=T$,
+\end{definition}
+
+\subsection{Partial Differential Equation for Option Pricing}
+Work in the physical(emprical) measure
+
+$n$-risky asset price process $S_t=(S_t^1,...,S_t^n)$
+\begin{align}
+  &dS_t=b(t,S_t)dt+\sigma(t,S_t)dW_t \\
+  &b:[0,T]\times\mathbb{R}^n \to \mathbb{R}^n \\
+  &\sigma:[0,T]\times\mathbb{R}^n \to \mathbb{R}^{n\times d}\\
+\end{align}
+$W$: $d$-dimensional B.M. under the physical measure
+
+money market
+\begin{align}
+  \beta(t) = \exp\left(\int_0^t r(s)ds \right)
+  \quad (s\geq 0)
+\end{align}
+$r(s)$ : non-random
+
+Let us consider a European Option which pays
+$\Psi(S_T)$ at $T$ ($\Psi:\mathbb{R}^n \to \mathbb{R}$)
+
+(ex. $\Psi(S_t)=\max(S_t^1-K,0)$ call on the 1st asset)
+
+Suppose the option price at $t\in[0,T]$
+is given by some function: \\
+$c:[0,T]\times \mathbb{R}^n\to\mathbb{R}$, \\
+$c\in \mathbb{C}^{1,2}$ (or smooth) \\
+such that the price at $t$ is $c(t,S_t)$
+
+It\^{o}-formula implies
+\begin{align}
+  dC(t,S_t)=\pd{}{t}c(t,S_t)dt+\sum_{i=1}^n c(t,s_t)dS_t^i
+  +\df{1}{2}\sum_{i,j=1}^n
+  \df{\partial^2 c(t,S_t)}{\partial x_i \partial x_j}
+  (\sigma \sigma^T)_{ij}(t,S_t)dt
+\end{align}
+
+
+Treat tye contingent claim as another treadable risky security.
+(オプションを取引可能資産に加える)
+\begin{itemize}
+  \item $\eta_t, \, 0\leq t\leq$:
+  number of position for the option
+  \item $\pi_t^i, \, 0\leq t\leq, \, i=1,...,n$:
+  number of position for the $i$th stock
+  \item $\zeta_t, \, 0\leq t\leq$:
+  number of position for $\beta$
+\end{itemize}
+
+Portfolio strategy:
+\begin{align}
+  h_t&=(\eta_t,\pi_t,\zeta_t)=(\eta_t,\pi_t^1,...,\pi_t^n,\zeta_t)\\
+  V_t^h&=\eta_t c(t,S_t)+\pi_t\cdot S_t+\zeta_t \beta(t)
+  =\eta_t c(t,S_t)+\sum_{i=1}^n \pi_t^i S_t^i+\zeta_t \beta(t)
+\end{align}
+
+Self-financing condition
+\begin{align}
+  dV_t^h=&\eta_t dc(t,S_t)+ \pi_t\cdot dS_t+\zeta_t d\beta(t) \notag\\
+  =&\eta_t dc(t,S_t)+ \pi_t\cdot dS_t
+  +r(t)(V_t^h-\eta_t c(t,S_t)-\pi_t\cdot S_t)dt \\
+  =&r(t)(V_t^h-\pi_t\cdot S_t)dt
+  +\sum_{i=1}^n(\eta_t \pd{}{x_i}c(t,S_t)+\pi_t^i)dS_t^i \notag\\ 
+  &+\eta_t\left(\pd{}{t}c(t,S_t)+\df{1}{2}\sum_{i,j=1}^n
+  (\sigma \sigma^T)_{ij}(t,S_t)
+  \df{\partial^2 c(t,S_t)}{\partial x_i \partial x_j}
+  -r(t)c(t,S_t)\right)dt
+\end{align}
+
+Choose the following strategy $h$ such that
+\begin{align}
+  \pi_t^i=\eta_t\pd{}{x_i}c(t,S_t) \quad i=1,...,n \, (0\leq t\leq T)
+\end{align}
+(delta neutral position)
+
+Then, for such a $h$,
+\begin{align}
+  dV_t^j=\eta_t \{& \,
+  \underline{\pd{}{t}c(t,S_t)+\df{1}{2}\sum_{i,j=1}^n
+  (\sigma \sigma^T)_{ij}(t,S_t)
+  \df{\partial^2 c(t,S_t)}{\partial x_i \partial x_j}}
+  \notag\\
+  &\underline{+r(t)\sum_{i=1}^n
+  (S_t^i \pd{}{x_i}c(t,S_t)-r(t)c(t,S_t)}
+  \,\} dt + r(t)V_t^h dt
+\end{align}
+
+There is no term of stochastic integral $dW$.
+Specify the trading strategy such that
+\begin{align}
+  \eta_t=
+  \begin{cases}
+    (\eta_t>0) \quad \mbox{when} \{ ...\} \geq 0\\ 
+    (\eta_t<0) \quad \mbox{when} \{ ...\} <0
+  \end{cases}
+\end{align}
+example:
+\begin{align}
+  \begin{cases}
+    1 \quad \mbox{when} \{ ...\} \geq 0\\ 
+    -1 \quad \mbox{when} \{ ...\} <0
+  \end{cases}
+\end{align}
+
+$r(t)$より高いリターンを無リスクで得られる!?
+
+$V_t^h$ :
+\begin{itemize}
+  \item higher return rate $>$ $r(t)$
+  \item risk-free (no $dW$-term)
+\end{itemize}
+$\Rightarrow$ arbitrage
+
+For the absense of arbitrage, we mus have
+$\{ ...\} =0$
+
+As a result, we have got the next pricing PDE:
+\begin{align}
+  &\pd{}{t}c(t,x)
+  +r(t)\sum_{i=1}^n x^i \pd{}{x_i}c(t,x)
+  +\df{1}{2}\sum_{i,j=1}^n
+  (\sigma \sigma^T)_{ij}(t,x)
+  \df{\partial^2 c(t,x)}{\partial x_i \partial x_j} 
+  -r(t)c(t,x)=0 \\
+  &\mbox{B.C.} \quad c(T,x)=\Psi(s) \quad \mbox{for }
+  x\in\mathbb{R}^n
+\end{align}
+for $(t,x)\in[0,T]\times\mathbb{R}^n$
+
+$dW$-termを消すようなstrategyをつくる \\
+$\Rightarrow r(t)V_t^h dt$以外の項がゼロになる必要がある(no-arbitrage)\\
+$\Rightarrow$ We got PDE.
+
+Black-Scholes: special case $n=d=1$
+\begin{align}
+  \sigma(t,x)=\sigma x, \quad r(t) \equiv r\geq 0
+\end{align}
+3次元以上だと計算が大変(だった)
+
+Suppose $c(t,x) \in \mathbb{C}^{1,2}([0,T]\times\mathbb{R}^n)$,
+solves the last PDE.
+Consider the self-financing portfolio given by
+$(\eta, \pi, \zeta)=(-1,\pi,\zeta)$.
+
+(short-position of the option, stock, money market)
+\begin{align}
+  dV_t=&r(t)(V_t-\pi_t-\zeta_t)dt+\sum_{i=1}^n
+  \left(-\pd{}{x_i}c(t,S_t)+\pi_t^i \right)dS_t^i \notag\\
+  &-\left(\pd{}{t}c(t,S_t)+\df{1}{2}\sum_{i,j=1}^n
+  (\sigma \sigma^T)_{ij}(t,S_t)
+  \df{\partial^2 c(t,S_t)}{\partial x_i \partial x_j}
+  -r(t)c(t,S_t)\right)dt
+\end{align}
+\begin{align}
+  dV_t=&r(t)(V_t-\pi_t-\zeta_t)dt+\sum_{i=1}^n
+  \left(-\pd{}{x_i}c(t,S_t)+\pi_t^i \right)dS_t^i
+  +r(t)\sum_{i=1}^n S_t^i \pd{c(t,S_t)}{x_i} dt
+\end{align}
+
+Since $c(t,x)$ satisfies the PDE,
+choose $\pi^*$ given by
+\begin{align}
+  \pi^{* i}(t)=\pd{}{x_i}c(t,S_t) \quad i=1,...,n
+\end{align}
+as $\pi_t$.
+
+$\Rightarrow$ for such $\pi^*$
+\begin{align}
+  dV_t=r(t)V_t dt
+\end{align}
+$\therefore$ If $V_0=0$, then $V_t=0$ for all $t\in[0,T]$
+
+This means the portfolio starting from a cash value
+$c(0,S_0)$ with dynamic position:
+\begin{align}
+  \left( \pi^{* i}(t),
+  \df{c(t,S_t)-\pi_t^{*}\cdot S_t}{\beta(t)} \right)
+\end{align}
+for stock and money market.
+
+(perfectly replicates not only the option payoff
+$c(T,S_T)=\Psi(S_T)$ but also the intermediate
+option value $c(t,S_t)$.
+
+\subsection{Relation to the Risk-Neutral Pricing}
 Suppose that there is a probability measure $Q$
 equivalent to $P$ such that
 \begin{align}
@@ -1385,7 +1708,7 @@ equivalent to $P$ such that
 $W^Q$ : Brownian motion under the measure $Q$
 
 
-\subsubsection{BS Option Formula}
+\subsection{BS Option Formula}
 $r, \sigma >0$ : const. \\
 one-dimensional $S, W^Q$
 
@@ -1511,7 +1834,7 @@ Therefore,
 \end{align}
 
 
-\subsubsection{Opriont Formula for a Stock with Dividend Yield}
+\subsection{Opriont Formula for a Stock with Dividend Yield}
 
 dividend payment $[t,t+dt]$ $q_(t)S_t dt$
 $q$:dividend yield
@@ -1626,7 +1949,13 @@ Option price $\Pi(t,S_t)$ at $(t.S_t)$
   \begin{align}
     \pd{}{\sigma} \Pi
   \end{align}
+  \item Cross Gamma:
+  \begin{align}
+    \df{\partial^2 \Pi}{\partial x_i \partial x_j}
+  \end{align}
 \end{itemize}
+
+Cross GammaはP/L-attirbutionを調べるのに使える．
 
 
 complete marketには十分な流動性が必要．
